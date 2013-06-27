@@ -1,0 +1,58 @@
+Hey guys; this file is meant to give you an overview of the data structures used to create
+the sudoku system.
+
+First, we have the Board class, extended by Solutionizer. Board maintains a 9x9 2-d list
+of Square objects, each of which maintains it's value (0 if unknown), and a list of
+possible values if the value is unknown. The list stores the values themselves and nothing
+else. E.g. if a square were to possibly be a 1, 3, or 9, the list is simply [1, 3, 9].
+
+Board has the maintenance functions, and Solutionizer is meant to house the solution
+algorithms, which is why Solutionizer extends Board.
+
+Manager houses the high-level algorithmic loop(s), instantiating a Solutionizer object
+and (eventually) pummeling it with increasingly sophisticated (and longer-running)
+algorithm method calls until progress has been made. Eventually, if informed searches
+fail to advance progress on the puzzle, a guess will be made, and the normal methods will
+continue, in a second control loop which is aware of the guess(es). 
+
+The program is initiated by Solver.py, which is effectively just the user front-end, 
+handling usage printouts, and values to be passed to Solutionizer upon instantiation.
+
+Additionally, there is a logger in place, which is instantiated by the manager and passed to
+Solutionizer. This logger can print to screen, but will write to a timestamped file in 
+the logs directory. There are 5 levels to the log. 0 (default) doesn't create a log.
+1 (ERROR) will log causes of sys.exit(1) calls, 2 (WARN) will warn the user of unexpected
+states, indicating that unexpected behavior is a strong possibility. 3 (INFO) gives a little
+information about the state progress of the solution attempt. 4 (DEBUG) expands on 3 greatly,
+logging every time a function is entered. Finally, level 5 (XTRME), will print out values 
+related to changes being made to the Board's grid[][] object. These last two levels are 
+quite verbose: simply building the board and calculating possible moves outputs over 1,000
+lines on level 4, and almost 2,500 lines on level 5. Due to this verbosity, file-based
+logging is recommended when using these settings.
+
+Finally, there are 3 support programs in place. 'clean.sh' is a script used to delete .pyc,
+.swp, .out, and .log files to streamline the git push process. If you want to save an
+important log file, make sure to rename its suffix, or manually delete these files (have
+fun with that...). 'run.sh' runs a base-case example of the Sudoku Solver. Mainly used for
+'does it run' testing. Lastly, 'verify_output.py' was written for Jenkins' use. Taking two
+file-name parameters, it will check two sudoku boards (see Example.board) to see if they're
+equivalent, asserting on each of the 81 squares.
+
+The Jenkins instance we're using for CI testing can be accessed through your browser at
+nightshift.dlinkddns.com:8080
+Jenkins is set to build the Sudoku Solver and test it against several test boards once
+every 6 hours (0000, 0600, 1200, and 1800 MST).
+
+Let me know if you want an account on the server, and it can be arranged, as I presently
+have registrations closed, since it is open to the public.
+
+Update 9/3/12: Created UML diagram UML.xmi; I don't know if .xmi is a common format or
+not, but I used Umbrello (linux) to create it.
+
+
+Kyle Smith
+
+hiko.san@gmail.com
+ksmitty@rams.colostate.edu
+
+9/2/12
